@@ -14,22 +14,22 @@ var xml = File.ReadAllText(xmlPath);
 
 var pdfFormat = new PdfFormatProvider();
 pdfFormat.ImportSettings.CopyStream = true;
-pdfFormat.ImportSettings.ReadingMode = Telerik.Windows.Documents.Fixed.FormatProviders.ReadingMode.AllAtOnce;
+//pdfFormat.ImportSettings.ReadingMode = Telerik.Windows.Documents.Fixed.FormatProviders.ReadingMode.AllAtOnce;
 var pdfStream = fi.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-var doc = pdfFormat.Import(pdfStream);
+var doc = pdfFormat.Import(pdfStream,TimeSpan.FromMinutes(1));
 
-if (doc.EmbeddedFiles.Any(doc => doc.Name.Equals("factur-x.xml", StringComparison.OrdinalIgnoreCase)))
-{
-    doc.EmbeddedFiles.Remove("factur-x.xml");
-}
+//if (doc.EmbeddedFiles.Any(doc => doc.Name.Equals("factur-x.xml", StringComparison.OrdinalIgnoreCase)))
+//{
+//    doc.EmbeddedFiles.Remove("factur-x.xml");
+//}
 
-doc.EmbeddedFiles.Add("factur-x.xml", Encoding.UTF8.GetBytes(xml));
+//doc.EmbeddedFiles.Add("factur-x.xml", Encoding.UTF8.GetBytes(xml));
 
 pdfStream.Seek(0L, SeekOrigin.Begin);
 
 var pdfOutputPath = @"invoice_factur-x.pdf";
 var pdfOutStream = new FileStream(pdfOutputPath, FileMode.Create, FileAccess.ReadWrite);
-pdfFormat.Export(doc, pdfOutStream);
+pdfFormat.Export(doc, pdfOutStream, TimeSpan.FromMinutes(1));
 
 pdfOutStream.Flush();
 pdfStream.Dispose();
